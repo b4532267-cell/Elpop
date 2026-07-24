@@ -1,0 +1,1756 @@
+<!DOCTYPE html>  
+<html lang="ar" dir="rtl">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>بلال | البوب - مطور بوتات ومواقع ويب</title>  
+    <meta name="description" content="الموقع الشخصي للمطور بلال (البوب) - مطور بوتات تيليجرام ومواقع ويب محترف">  
+    
+    <!-- Google Fonts: Cairo -->  
+    <link rel="preconnect" href="https://fonts.googleapis.com">  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">  
+  
+    <!-- Font Awesome Icons -->  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
+  
+    <!-- أسلوب التنسيق والتصميم (CSS3) -->  
+    <style>  
+        /* --------------------------------------------------------------------------  
+           1. GLOBAL RESETS & VARS  
+           -------------------------------------------------------------------------- */  
+        :root {  
+            /* ثيم الوضع المظلم (Dark Theme Variables) */  
+            --bg-primary: #0D0D0D;  
+            --bg-secondary: #0F172A;  
+            --accent-gold: #D4AF37;  
+            --accent-gold-rgb: 212, 175, 55;  
+            --text-primary: #FFFFFF;  
+            --text-secondary: #94A3B8;  
+            --glass-bg: rgba(15, 23, 42, 0.6);  
+            --glass-border: rgba(214, 175, 55, 0.15);  
+            --header-bg: rgba(13, 13, 13, 0.85);  
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);  
+            --transition-speed: 0.4s;  
+        }  
+
+        [data-theme="light"] {  
+            /* ثيم الوضع المضيء (Light Theme Variables) */  
+            --bg-primary: #F8FAFC;  
+            --bg-secondary: #E2E8F0;  
+            --accent-gold: #C5A028;  
+            --accent-gold-rgb: 197, 160, 40;  
+            --text-primary: #0F172A;  
+            --text-secondary: #475569;  
+            --glass-bg: rgba(255, 255, 255, 0.7);  
+            --glass-border: rgba(197, 160, 40, 0.25);  
+            --header-bg: rgba(248, 250, 252, 0.85);  
+            --card-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.15);  
+        }  
+
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+        }  
+
+        html {  
+            scroll-behavior: smooth;  
+            font-size: 16px;  
+        }  
+
+        body {  
+            font-family: 'Cairo', sans-serif;  
+            background-color: var(--bg-primary);  
+            color: var(--text-primary);  
+            overflow-x: hidden;  
+            transition: background-color var(--transition-speed), color var(--transition-speed);  
+        }  
+
+        .container {  
+            width: 100%;  
+            max-width: 1200px;  
+            margin: 0 auto;  
+            padding: 0 20px;  
+        }  
+
+        a {  
+            text-decoration: none;  
+            color: inherit;  
+            transition: var(--transition-speed);  
+        }  
+
+        li {  
+            list-style: none;  
+        }  
+
+        /* تخصيص شريط التمرير (Custom Scrollbar) */  
+        ::-webkit-scrollbar {  
+            width: 8px;  
+        }  
+        ::-webkit-scrollbar-track {  
+            background: var(--bg-primary);  
+        }  
+        ::-webkit-scrollbar-thumb {  
+            background: var(--accent-gold);  
+            border-radius: 10px;  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           2. LOADER & CURSOR EFFECTS  
+           -------------------------------------------------------------------------- */  
+        .loader-wrapper {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100vh;  
+            background: #0D0D0D;  
+            z-index: 9999;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            transition: opacity 0.5s ease, visibility 0.5s ease;  
+        }  
+
+        .loader-content {  
+            position: relative;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+        }  
+
+        .spinner {  
+            width: 90px;  
+            height: 90px;  
+            border: 3px solid transparent;  
+            border-top: 3px solid var(--accent-gold);  
+            border-radius: 50%;  
+            animation: spin 1s linear infinite;  
+        }  
+
+        .loader-logo {  
+            position: absolute;  
+            color: #FFFFFF;  
+            font-size: 1.3rem;  
+            font-weight: 700;  
+            letter-spacing: 2px;  
+        }  
+
+        @keyframes spin {  
+            0% { transform: rotate(0deg); }  
+            100% { transform: rotate(360deg); }  
+        }  
+
+        /* مؤشر الماوس المخصص */  
+        #custom-cursor, #custom-cursor-dot {  
+            position: fixed;  
+            pointer-events: none;  
+            z-index: 10000;  
+            border-radius: 50%;  
+            transform: translate(-50%, -50%);  
+            transition: transform 0.1s ease, background-color var(--transition-speed);  
+            display: none;  
+        }  
+
+        #custom-cursor {  
+            width: 30px;  
+            height: 30px;  
+            border: 1px solid var(--accent-gold);  
+            transition: width 0.3s, height 0.3s, transform 0.1s;  
+        }  
+
+        #custom-cursor-dot {  
+            width: 6px;  
+            height: 6px;  
+            background-color: var(--accent-gold);  
+        }  
+
+        /* زر العودة للأعلى */  
+        #scroll-to-top {  
+            position: fixed;  
+            bottom: 30px;  
+            right: -60px;  
+            z-index: 99;  
+            width: 45px;  
+            height: 45px;  
+            border: none;  
+            border-radius: 50%;  
+            background: var(--accent-gold);  
+            color: #0D0D0D;  
+            font-size: 1.1rem;  
+            cursor: pointer;  
+            box-shadow: 0 4px 15px rgba(var(--accent-gold-rgb), 0.4);  
+            transition: right 0.4s ease, transform 0.3s ease;  
+        }  
+
+        #scroll-to-top:hover {  
+            transform: translateY(-5px);  
+        }  
+
+        #scroll-to-top.show {  
+            right: 30px;  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           3. HEADER & NAVIGATION  
+           -------------------------------------------------------------------------- */  
+        .main-header {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            z-index: 1000;  
+            background-color: var(--header-bg);  
+            backdrop-filter: blur(12px);  
+            -webkit-backdrop-filter: blur(12px);  
+            border-bottom: 1px solid var(--glass-border);  
+            transition: background-color var(--transition-speed), border-color var(--transition-speed), padding 0.3s;  
+            padding: 20px 0;  
+        }  
+
+        .main-header.shrink {  
+            padding: 10px 0;  
+        }  
+
+        .header-container {  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+        }  
+
+        .logo-brand {  
+            font-size: 1.8rem;  
+            font-weight: 800;  
+            color: var(--text-primary);  
+            display: flex;  
+            align-items: center;  
+            gap: 10px;  
+        }  
+
+        .logo-dot {  
+            width: 8px;  
+            height: 8px;  
+            background-color: var(--accent-gold);  
+            border-radius: 50%;  
+            box-shadow: 0 0 10px var(--accent-gold);  
+        }  
+
+        .nav-menu {  
+            display: flex;  
+            gap: 30px;  
+        }  
+
+        .nav-link {  
+            font-weight: 600;  
+            font-size: 1.05rem;  
+            color: var(--text-secondary);  
+            position: relative;  
+            padding: 5px 0;  
+        }  
+
+        .nav-link:hover, .nav-link.active {  
+            color: var(--accent-gold);  
+        }  
+
+        .nav-link::after {  
+            content: '';  
+            position: absolute;  
+            bottom: 0;  
+            right: 0;  
+            width: 0;  
+            height: 2px;  
+            background-color: var(--accent-gold);  
+            transition: width 0.3s ease;  
+        }  
+
+        .nav-link:hover::after, .nav-link.active::after {  
+            width: 100%;  
+        }  
+
+        .header-actions {  
+            display: flex;  
+            align-items: center;  
+            gap: 15px;  
+        }  
+
+        .theme-btn {  
+            background: none;  
+            border: 1px solid var(--glass-border);  
+            width: 40px;  
+            height: 40px;  
+            border-radius: 50%;  
+            color: var(--text-primary);  
+            cursor: pointer;  
+            font-size: 1.1rem;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            transition: var(--transition-speed);  
+        }  
+
+        .theme-btn:hover {  
+            border-color: var(--accent-gold);  
+            color: var(--accent-gold);  
+            box-shadow: 0 0 12px var(--glass-border);  
+        }  
+
+        .hamburger {  
+            display: none;  
+            background: none;  
+            border: none;  
+            cursor: pointer;  
+        }  
+
+        .bar {  
+            display: block;  
+            width: 25px;  
+            height: 3px;  
+            margin: 5px auto;  
+            transition: all 0.3s ease-in-out;  
+            background-color: var(--text-primary);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           4. HERO SECTION  
+           -------------------------------------------------------------------------- */  
+        .hero-section {  
+            position: relative;  
+            height: 100vh;  
+            min-height: 600px;  
+            display: flex;  
+            align-items: center;  
+            overflow: hidden;  
+            background: radial-gradient(circle at top left, var(--bg-secondary), var(--bg-primary));  
+        }  
+
+        #particles-canvas {  
+            position: absolute;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            pointer-events: none;  
+        }  
+
+        .hero-container {  
+            position: relative;  
+            z-index: 2;  
+        }  
+
+        .hero-content {  
+            max-width: 700px;  
+        }  
+
+        .hero-subtitle {  
+            color: var(--accent-gold);  
+            font-size: 1.2rem;  
+            font-weight: 600;  
+            margin-bottom: 15px;  
+            text-transform: uppercase;  
+            letter-spacing: 2px;  
+        }  
+
+        .hero-title {  
+            font-size: 3.8rem;  
+            font-weight: 800;  
+            line-height: 1.2;  
+            margin-bottom: 20px;  
+            color: var(--text-primary);  
+        }  
+
+        .glow-text {  
+            color: var(--accent-gold);  
+            text-shadow: 0 0 20px rgba(var(--accent-gold-rgb), 0.4);  
+        }  
+
+        .typing-container {  
+            font-size: 1.8rem;  
+            font-weight: 700;  
+            margin-bottom: 25px;  
+            color: var(--text-secondary);  
+            display: flex;  
+            align-items: center;  
+            height: 40px;  
+        }  
+
+        .typed-text {  
+            color: var(--text-primary);  
+            margin-right: 8px;  
+        }  
+
+        .typed-cursor {  
+            animation: blink 0.7s infinite;  
+            color: var(--accent-gold);  
+        }  
+
+        @keyframes blink {  
+            0%, 100% { opacity: 1; }  
+            50% { opacity: 0; }  
+        }  
+
+        .hero-description {  
+            font-size: 1.15rem;  
+            color: var(--text-secondary);  
+            line-height: 1.8;  
+            margin-bottom: 35px;  
+        }  
+
+        .hero-buttons {  
+            display: flex;  
+            gap: 20px;  
+            flex-wrap: wrap;  
+        }  
+
+        .btn {  
+            position: relative;  
+            display: inline-flex;  
+            align-items: center;  
+            justify-content: center;  
+            gap: 10px;  
+            padding: 14px 28px;  
+            font-size: 1.05rem;  
+            font-weight: 700;  
+            border-radius: 30px;  
+            cursor: pointer;  
+            overflow: hidden;  
+            transition: all 0.3s ease;  
+        }  
+
+        .btn-primary {  
+            background: var(--accent-gold);  
+            color: #0D0D0D;  
+            box-shadow: 0 4px 20px rgba(var(--accent-gold-rgb), 0.3);  
+        }  
+
+        .btn-primary:hover {  
+            box-shadow: 0 6px 24px rgba(var(--accent-gold-rgb), 0.5);  
+            transform: translateY(-3px);  
+        }  
+
+        .btn-secondary {  
+            background: transparent;  
+            color: var(--text-primary);  
+            border: 2px solid var(--accent-gold);  
+        }  
+
+        .btn-secondary:hover {  
+            background: rgba(var(--accent-gold-rgb), 0.1);  
+            transform: translateY(-3px);  
+        }  
+
+        .ripple-span {  
+            position: absolute;  
+            border-radius: 50%;  
+            transform: scale(0);  
+            animation: ripple-effect 0.6s linear;  
+            background-color: rgba(255, 255, 255, 0.4);  
+        }  
+        .btn-primary .ripple-span {  
+            background-color: rgba(0, 0, 0, 0.15);  
+        }  
+
+        @keyframes ripple-effect {  
+            to {  
+                transform: scale(4);  
+                opacity: 0;  
+            }  
+        }  
+
+        .scroll-indicator {  
+            position: absolute;  
+            bottom: 30px;  
+            left: 50%;  
+            transform: translateX(-50%);  
+            z-index: 2;  
+        }  
+
+        .mouse-scroll {  
+            width: 25px;  
+            height: 40px;  
+            border: 2px solid var(--text-secondary);  
+            border-radius: 20px;  
+            display: block;  
+            position: relative;  
+        }  
+
+        .mouse-scroll::after {  
+            content: '';  
+            width: 6px;  
+            height: 6px;  
+            background-color: var(--accent-gold);  
+            border-radius: 50%;  
+            position: absolute;  
+            top: 8px;  
+            left: 50%;  
+            transform: translateX(-50%);  
+            animation: scroll-anim 1.5s infinite;  
+        }  
+
+        @keyframes scroll-anim {  
+            0% { opacity: 0; top: 8px; }  
+            50% { opacity: 1; }  
+            100% { opacity: 0; top: 22px; }  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           5. SECTIONS GENERAL STYLING  
+           -------------------------------------------------------------------------- */  
+        .section-padding {  
+            padding: 100px 0;  
+        }  
+
+        .section-header {  
+            text-align: center;  
+            margin-bottom: 60px;  
+        }  
+
+        .header-tag {  
+            color: var(--accent-gold);  
+            font-size: 0.95rem;  
+            font-weight: 700;  
+            letter-spacing: 2px;  
+            text-transform: uppercase;  
+            display: inline-block;  
+            margin-bottom: 10px;  
+        }  
+
+        .section-title {  
+            font-size: 2.5rem;  
+            font-weight: 800;  
+        }  
+
+        .title-underline {  
+            width: 80px;  
+            height: 4px;  
+            background-color: var(--accent-gold);  
+            margin: 15px auto 0;  
+            border-radius: 2px;  
+            box-shadow: 0 0 10px rgba(var(--accent-gold-rgb), 0.5);  
+        }  
+
+        .reveal {  
+            opacity: 0;  
+            transform: translateY(50px);  
+            transition: opacity 0.8s ease, transform 0.8s ease;  
+        }  
+
+        .reveal.active {  
+            opacity: 1;  
+            transform: translateY(0);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           6. ABOUT SECTION  
+           -------------------------------------------------------------------------- */  
+        .about-grid {  
+            display: grid;  
+            grid-template-columns: 1fr 1.2fr;  
+            gap: 60px;  
+            align-items: center;  
+        }  
+
+        .about-img-box {  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+        }  
+
+        .visual-card {  
+            background: var(--glass-bg);  
+            border: 1px solid var(--glass-border);  
+            border-radius: 24px;  
+            width: 280px;  
+            height: 280px;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            box-shadow: var(--card-shadow);  
+            backdrop-filter: blur(8px);  
+        }  
+
+        .card-inner {  
+            position: relative;  
+            width: 140px;  
+            height: 140px;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+        }  
+
+        .code-icon {  
+            font-size: 4.5rem;  
+            color: var(--accent-gold);  
+            filter: drop-shadow(0 0 15px rgba(var(--accent-gold-rgb), 0.4));  
+        }  
+
+        .pulse-ring {  
+            position: absolute;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            border: 3px solid var(--accent-gold);  
+            border-radius: 50%;  
+            animation: pulsing-glow 2s infinite ease-out;  
+        }  
+
+        @keyframes pulsing-glow {  
+            0% { transform: scale(0.8); opacity: 0.8; }  
+            100% { transform: scale(1.4); opacity: 0; }  
+        }  
+
+        .about-info h3 {  
+            font-size: 1.8rem;  
+            font-weight: 700;  
+            margin-bottom: 20px;  
+        }  
+
+        .gold-highlight {  
+            color: var(--accent-gold);  
+        }  
+
+        .about-text {  
+            font-size: 1.1rem;  
+            color: var(--text-secondary);  
+            line-height: 1.8;  
+            margin-bottom: 20px;  
+        }  
+
+        .info-badges {  
+            display: flex;  
+            gap: 20px;  
+            margin-top: 35px;  
+            flex-wrap: wrap;  
+        }  
+
+        .badge-item {  
+            background: var(--glass-bg);  
+            border: 1px solid var(--glass-border);  
+            padding: 15px 25px;  
+            border-radius: 15px;  
+            flex: 1;  
+            min-width: 130px;  
+            text-align: center;  
+            box-shadow: var(--card-shadow);  
+        }  
+
+        .badge-val {  
+            display: block;  
+            font-size: 1.6rem;  
+            font-weight: 800;  
+            color: var(--accent-gold);  
+            margin-bottom: 5px;  
+        }  
+
+        .badge-lbl {  
+            font-size: 0.9rem;  
+            font-weight: 600;  
+            color: var(--text-secondary);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           7. SERVICES SECTION  
+           -------------------------------------------------------------------------- */  
+        .services-grid {  
+            display: grid;  
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));  
+            gap: 30px;  
+        }  
+
+        .service-card {  
+            background: var(--glass-bg);  
+            border: 1px solid var(--glass-border);  
+            border-radius: 20px;  
+            padding: 40px 30px;  
+            position: relative;  
+            overflow: hidden;  
+            box-shadow: var(--card-shadow);  
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;  
+            backdrop-filter: blur(8px);  
+        }  
+
+        .service-card:hover {  
+            transform: translateY(-10px);  
+            border-color: var(--accent-gold);  
+            box-shadow: 0 12px 40px rgba(var(--accent-gold-rgb), 0.2);  
+        }  
+
+        .service-icon-box {  
+            width: 65px;  
+            height: 65px;  
+            border-radius: 15px;  
+            background: rgba(var(--accent-gold-rgb), 0.1);  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            font-size: 1.8rem;  
+            color: var(--accent-gold);  
+            margin-bottom: 25px;  
+            transition: var(--transition-speed);  
+        }  
+
+        .service-card:hover .service-icon-box {  
+            background: var(--accent-gold);  
+            color: #0D0D0D;  
+            box-shadow: 0 5px 15px rgba(var(--accent-gold-rgb), 0.3);  
+        }  
+
+        .service-card h3 {  
+            font-size: 1.4rem;  
+            font-weight: 700;  
+            margin-bottom: 15px;  
+        }  
+
+        .service-card p {  
+            color: var(--text-secondary);  
+            line-height: 1.7;  
+            font-size: 0.98rem;  
+        }  
+
+        .card-glow-bg {  
+            position: absolute;  
+            width: 150px;  
+            height: 150px;  
+            background: radial-gradient(circle, rgba(var(--accent-gold-rgb), 0.15) 0%, transparent 70%);  
+            bottom: -75px;  
+            left: -75px;  
+            pointer-events: none;  
+            transition: transform var(--transition-speed);  
+        }  
+
+        .service-card:hover .card-glow-bg {  
+            transform: scale(1.5);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           8. PORTFOLIO SECTION  
+           -------------------------------------------------------------------------- */  
+        .portfolio-grid {  
+            display: grid;  
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));  
+            gap: 30px;  
+        }  
+
+        .portfolio-card {  
+            background: var(--glass-bg);  
+            border: 1px solid var(--glass-border);  
+            border-radius: 20px;  
+            overflow: hidden;  
+            box-shadow: var(--card-shadow);  
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;  
+            display: flex;  
+            flex-direction: column;  
+        }  
+
+        .portfolio-card:hover {  
+            transform: translateY(-10px);  
+            border-color: var(--accent-gold);  
+            box-shadow: 0 12px 40px rgba(var(--accent-gold-rgb), 0.2);  
+        }  
+
+        .project-visual {  
+            height: 180px;  
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #0D0D0D 100%);  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            position: relative;  
+            border-bottom: 1px solid var(--glass-border);  
+        }  
+
+        .project-main-icon {  
+            font-size: 4.5rem;  
+            color: var(--accent-gold);  
+            opacity: 0.8;  
+            transition: transform 0.5s ease;  
+        }  
+
+        .portfolio-card:hover .project-main-icon {  
+            transform: scale(1.15) rotate(5deg);  
+        }  
+
+        .project-info {  
+            padding: 25px;  
+            display: flex;  
+            flex-direction: column;  
+            flex-grow: 1;  
+        }  
+
+        .project-category {  
+            color: var(--accent-gold);  
+            font-size: 0.85rem;  
+            font-weight: 700;  
+            text-transform: uppercase;  
+            margin-bottom: 10px;  
+        }  
+
+        .project-info h3 {  
+            font-size: 1.35rem;  
+            font-weight: 700;  
+            margin-bottom: 12px;  
+        }  
+
+        .project-info p {  
+            color: var(--text-secondary);  
+            line-height: 1.6;  
+            font-size: 0.95rem;  
+            margin-bottom: 20px;  
+        }  
+
+        .project-tags {  
+            display: flex;  
+            gap: 10px;  
+            flex-wrap: wrap;  
+            margin-top: auto;  
+        }  
+
+        .project-tags span {  
+            background: rgba(var(--accent-gold-rgb), 0.08);  
+            color: var(--accent-gold);  
+            font-size: 0.8rem;  
+            padding: 5px 12px;  
+            border-radius: 30px;  
+            font-weight: 600;  
+            border: 1px solid rgba(var(--accent-gold-rgb), 0.15);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           9. SKILLS SECTION  
+           -------------------------------------------------------------------------- */  
+        .skills-wrapper {  
+            max-width: 800px;  
+            margin: 0 auto;  
+            display: flex;  
+            flex-direction: column;  
+            gap: 35px;  
+        }  
+
+        .skill-item {  
+            width: 100%;  
+        }  
+
+        .skill-info {  
+            display: flex;  
+            justify-content: space-between;  
+            font-size: 1.1rem;  
+            font-weight: 700;  
+            margin-bottom: 12px;  
+        }  
+
+        .skill-name {  
+            display: flex;  
+            align-items: center;  
+            gap: 10px;  
+        }  
+
+        .text-gold {  
+            color: var(--accent-gold);  
+        }  
+
+        .skill-bar-outer {  
+            height: 12px;  
+            background: var(--bg-secondary);  
+            border-radius: 6px;  
+            overflow: hidden;  
+            position: relative;  
+        }  
+
+        .skill-bar-inner {  
+            height: 100%;  
+            width: 0;  
+            background: linear-gradient(90deg, var(--accent-gold), rgba(var(--accent-gold-rgb), 0.5));  
+            border-radius: 6px;  
+            box-shadow: 0 0 12px var(--accent-gold);  
+            transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           10. CONTACT SECTION  
+           -------------------------------------------------------------------------- */  
+        .contact-grid {  
+            display: flex;  
+            justify-content: center;  
+            gap: 40px;  
+            flex-wrap: wrap;  
+        }  
+
+        .contact-card {  
+            background: var(--glass-bg);  
+            border: 1px solid var(--glass-border);  
+            border-radius: 24px;  
+            padding: 40px;  
+            text-align: center;  
+            width: 320px;  
+            box-shadow: var(--card-shadow);  
+            transition: transform 0.4s ease, border-color 0.4s ease;  
+            backdrop-filter: blur(8px);  
+        }  
+
+        .contact-card:hover {  
+            transform: translateY(-8px);  
+            border-color: var(--accent-gold);  
+        }  
+
+        .contact-icon {  
+            font-size: 2.8rem;  
+            color: var(--accent-gold);  
+            margin-bottom: 20px;  
+        }  
+
+        .contact-card h3 {  
+            font-size: 1.3rem;  
+            font-weight: 700;  
+            margin-bottom: 10px;  
+        }  
+
+        .contact-value {  
+            color: var(--text-secondary);  
+            font-size: 1.1rem;  
+            font-weight: 600;  
+            margin-bottom: 25px;  
+        }  
+
+        .contact-action-btn {  
+            display: block;  
+            width: 100%;  
+            background-color: var(--accent-gold);  
+            color: #0D0D0D;  
+            font-weight: 700;  
+            padding: 12px 0;  
+            border-radius: 30px;  
+            box-shadow: 0 4px 15px rgba(var(--accent-gold-rgb), 0.2);  
+        }  
+
+        .contact-action-btn:hover {  
+            transform: translateY(-3px);  
+            box-shadow: 0 6px 20px rgba(var(--accent-gold-rgb), 0.4);  
+        }  
+
+        .channel-btn {  
+            background: transparent;  
+            border: 2px solid var(--accent-gold);  
+            color: var(--text-primary);  
+        }  
+
+        .channel-btn:hover {  
+            background: rgba(var(--accent-gold-rgb), 0.1);  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           11. FOOTER  
+           -------------------------------------------------------------------------- */  
+        .main-footer {  
+            border-top: 1px solid var(--glass-border);  
+            padding: 30px 0;  
+            text-align: center;  
+            background-color: var(--bg-primary);  
+        }  
+
+        .main-footer p {  
+            color: var(--text-secondary);  
+            font-size: 0.95rem;  
+            font-weight: 600;  
+        }  
+
+        .developer-tag {  
+            margin-top: 10px;  
+            font-size: 1.1rem !important;  
+            font-weight: 800 !important;  
+            color: var(--accent-gold);  
+            text-shadow: 0 0 10px rgba(var(--accent-gold-rgb), 0.3);  
+            letter-spacing: 1px;  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           12. MEDIA QUERIES (RESPONSIVENESS)  
+           -------------------------------------------------------------------------- */  
+        @media (max-width: 992px) {  
+            .about-grid {  
+                grid-template-columns: 1fr;  
+                gap: 40px;  
+            }  
+              
+            .hero-title {  
+                font-size: 3rem;  
+            }  
+        }  
+
+        @media (max-width: 768px) {  
+            .hamburger {  
+                display: block;  
+                z-index: 1001;  
+            }  
+              
+            .hamburger.active .bar:nth-child(2) {  
+                opacity: 0;  
+            }  
+            .hamburger.active .bar:nth-child(1) {  
+                transform: translateY(8px) rotate(45deg);  
+            }  
+            .hamburger.active .bar:nth-child(3) {  
+                transform: translateY(-8px) rotate(-45deg);  
+            }  
+              
+            .nav-bar {  
+                position: fixed;  
+                right: -100%;  
+                top: 0;  
+                width: 75%;  
+                height: 100vh;  
+                background-color: var(--bg-secondary);  
+                z-index: 1000;  
+                display: flex;  
+                justify-content: center;  
+                align-items: center;  
+                transition: right 0.4s cubic-bezier(0.1, 0.8, 0.2, 1);  
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);  
+            }  
+              
+            .nav-bar.active {  
+                right: 0;  
+            }  
+              
+            .nav-menu {  
+                flex-direction: column;  
+                align-items: center;  
+                gap: 35px;  
+            }  
+              
+            .hero-title {  
+                font-size: 2.5rem;  
+            }  
+              
+            .typing-container {  
+                font-size: 1.4rem;  
+            }  
+        }  
+
+        /* --------------------------------------------------------------------------  
+           13. FULL SCREEN POPUP ADVERTISEMENT STYLING (ملء الشاشة بالكامل)  
+           -------------------------------------------------------------------------- */  
+        .ad-popup-overlay {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100vw;  
+            height: 100vh;  
+            background-color: #000000;  
+            z-index: 10001;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            opacity: 0;  
+            visibility: hidden;  
+            transition: opacity 0.35s ease, visibility 0.35s ease;  
+        }  
+
+        .ad-popup-overlay.show {  
+            opacity: 1;  
+            visibility: visible;  
+        }  
+
+        .ad-popup-container {  
+            position: relative;  
+            width: 100vw;  
+            height: 100vh;  
+            max-width: 100%;  
+            max-height: 100%;  
+            border: none;  
+            border-radius: 0;  
+            padding: 0;  
+            margin: 0;  
+            overflow: hidden;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            transform: scale(0.98);  
+            transition: transform 0.35s ease;  
+        }  
+
+        .ad-popup-overlay.show .ad-popup-container {  
+            transform: scale(1);  
+        }  
+
+        .ad-popup-close-btn {  
+            position: fixed;  
+            top: 20px;  
+            right: 20px;  
+            width: 44px;  
+            height: 44px;  
+            border-radius: 50%;  
+            background-color: rgba(0, 0, 0, 0.7);  
+            border: 2px solid rgba(255, 255, 255, 0.4);  
+            color: #FFFFFF;  
+            font-size: 1.5rem;  
+            cursor: pointer;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            transition: all 0.3s ease;  
+            line-height: 1;  
+            z-index: 10002;  
+        }  
+
+        .ad-popup-close-btn:hover {  
+            background-color: rgba(239, 68, 68, 0.9);  
+            transform: scale(1.1);  
+        }  
+
+        .ad-popup-image-wrapper {  
+            display: block;  
+            width: 100vw;  
+            height: 100vh;  
+            text-decoration: none;  
+        }  
+
+        .ad-popup-image {  
+            width: 100vw;  
+            height: 100vh;  
+            object-fit: cover;  
+            display: block;  
+            cursor: pointer;  
+        }  
+    </style>  
+</head>  
+<body>  
+
+<!-- شاشة التحميل الاحترافية (Loading Screen) -->  
+<div id="loader" class="loader-wrapper">  
+    <div class="loader-content">  
+        <div class="spinner"></div>  
+        <span class="loader-logo">البوب</span>  
+    </div>  
+</div>  
+
+<!-- مؤشر الماوس المخصص (Custom Cursor) -->  
+<div id="custom-cursor"></div>  
+<div id="custom-cursor-dot"></div>  
+
+<!-- زر العودة للأعلى -->  
+<button id="scroll-to-top" aria-label="العودة للأعلى"><i class="fas fa-chevron-up"></i></button>  
+
+<!-- الهيدر وقائمة التنقل (Header & Navigation) -->  
+<header class="main-header">  
+    <div class="container header-container">  
+        <a href="#" class="logo-brand">  
+            <span class="logo-dot"></span>البوب  
+        </a>  
+          
+        <nav class="nav-bar" id="nav-bar">  
+            <ul class="nav-menu">  
+                <li><a href="#hero" class="nav-link active">الرئيسية</a></li>  
+                <li><a href="#about" class="nav-link">نبذة</a></li>  
+                <li><a href="#services" class="nav-link">الخدمات</a></li>  
+                <li><a href="#portfolio" class="nav-link">الأعمال</a></li>  
+                <li><a href="#skills" class="nav-link">المهارات</a></li>  
+                <li><a href="#contact" class="nav-link">تواصل</a></li>  
+            </ul>  
+        </nav>  
+
+        <div class="header-actions">  
+            <button id="theme-toggle" class="theme-btn" aria-label="تغيير الوضع">  
+                <i class="fas fa-moon"></i>  
+            </button>  
+              
+            <button class="hamburger" id="hamburger" aria-label="قائمة التحكم">  
+                <span class="bar"></span>  
+                <span class="bar"></span>  
+                <span class="bar"></span>  
+            </button>  
+        </div>  
+    </div>  
+</header>  
+
+<!-- القسم الرئيسي (Hero Section) -->  
+<section id="hero" class="hero-section">  
+    <canvas id="particles-canvas"></canvas>  
+      
+    <div class="container hero-container">  
+        <div class="hero-content reveal">  
+            <h2 class="hero-subtitle">أهلاً بك في عالمي البرمجي</h2>  
+            <h1 class="hero-title">بلال | <span class="glow-text">EL POP</span></h1>  
+              
+            <div class="typing-container">  
+                <span class="typing-prefix">أنا </span>  
+                <span id="typed-text" class="typed-text"></span>  
+                <span class="typed-cursor">|</span>  
+            </div>  
+              
+            <p class="hero-description">  
+                أقوم بتطوير بوتات تيليجرام ذكية وتصميم وتطوير مواقع ويب حديثة وسريعة ومبتكرة تمنح المستخدمين تجربة فريدة.  
+            </p>  
+              
+            <div class="hero-buttons">  
+                <a href="https://wa.me/201015115056" target="_blank" class="btn btn-primary ripple">  
+                    <i class="fab fa-whatsapp"></i> تواصل عبر واتساب  
+                </a>  
+                <a href="#portfolio" class="btn btn-secondary ripple">  
+                    مشاهدة الأعمال <i class="fas fa-arrow-left"></i>  
+                </a>  
+            </div>  
+        </div>  
+    </div>  
+    <div class="scroll-indicator">  
+        <span class="mouse-scroll"></span>  
+    </div>  
+</section>  
+
+<!-- قسم نبذة عني (About Section) -->  
+<section id="about" class="about-section section-padding">  
+    <div class="container">  
+        <div class="section-header reveal">  
+            <span class="header-tag">من أنا</span>  
+            <h2 class="section-title">نبذة عني</h2>  
+            <div class="title-underline"></div>  
+        </div>  
+          
+        <div class="about-grid">  
+            <div class="about-img-box reveal">  
+                <div class="visual-card">  
+                    <div class="card-inner">  
+                        <i class="fas fa-laptop-code code-icon"></i>  
+                        <div class="pulse-ring"></div>  
+                    </div>  
+                </div>  
+            </div>  
+              
+            <div class="about-info reveal">  
+                <h3>اسمي بلال، وملقب بـ <span class="gold-highlight">البوب</span></h3>  
+                <p class="about-text">  
+                    أنا مطور بوتات تيليجرام ومطور مواقع ويب شغوف بالتقنية والكتابة البرمجية النظيفة. من جمهورية مصر العربية 🇪🇬، وبعمر 14 عاماً، تمكنت من خوض غمار البرمجة وتطوير مشاريع عملية متقدمة تجمع بين السرعة والجمالية.  
+                </p>  
+                <p class="about-text">  
+                    أهتم جداً ببناء تجارب مستخدم ممتازة وتوظيف أحدث التقنيات لتقديم خدمات برمجية تنافسية تلبي احتياجات العملاء وتفوق توقعاتهم.  
+                </p>  
+                  
+                <div class="info-badges">  
+                    <div class="badge-item">  
+                        <span class="badge-val">14</span>  
+                        <span class="badge-lbl">العمر</span>  
+                    </div>  
+                    <div class="badge-item">  
+                        <span class="badge-val">مصر 🇪🇬</span>  
+                        <span class="badge-lbl">المقر</span>  
+                    </div>  
+                    <div class="badge-item">  
+                        <span class="badge-val">+3</span>  
+                        <span class="badge-lbl">سنوات الشغف</span>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- قسم الخدمات (Services Section) -->  
+<section id="services" class="services-section section-padding">  
+    <div class="container">  
+        <div class="section-header reveal">  
+            <span class="header-tag">ماذا أقدم؟</span>  
+            <h2 class="section-title">الخدمات الاحترافية</h2>  
+            <div class="title-underline"></div>  
+        </div>  
+          
+        <div class="services-grid">  
+            <div class="service-card reveal">  
+                <div class="service-icon-box">  
+                    <i class="fab fa-telegram-plane"></i>  
+                </div>  
+                <h3>تطوير بوتات تيليجرام</h3>  
+                <p>برمجة وتصميم بوتات تيليجرام ذكية ومتكاملة لتسهيل إدارة المجموعات، القنوات، وتقديم خدمات برمجية آلية وسريعة بمرونة كاملة.</p>  
+                <span class="card-glow-bg"></span>  
+            </div>  
+              
+            <div class="service-card reveal">  
+                <div class="service-icon-box">  
+                    <i class="fas fa-code"></i>  
+                </div>  
+                <h3>تطوير مواقع ويب</h3>  
+                <p>تصميم وتكويد واجهات مستخدم متجاوبة (Responsive) وتفاعلية بالكامل تعمل بنعومة وسلاسة فائقة على شاشات الهواتف والكمبيوتر.</p>  
+                <span class="card-glow-bg"></span>  
+            </div>  
+              
+            <div class="service-card reveal">  
+                <div class="service-icon-box">  
+                    <i class="fas fa-tools"></i>  
+                </div>  
+                <h3>تحسين وتعديل المشاريع</h3>  
+                <p>مراجعة الأكواد البرمجية، وتحسين كفاءة أداء البوتات والمواقع الحالية، مع إصلاح الأخطاء وإضافة مميزات برمجية جديدة وعصرية.</p>  
+                <span class="card-glow-bg"></span>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- قسم الأعمال (Portfolio Section) -->  
+<section id="portfolio" class="portfolio-section section-padding">  
+    <div class="container">  
+        <div class="section-header reveal">  
+            <span class="header-tag">معرض أعمالي</span>  
+            <h2 class="section-title">أحدث المشاريع</h2>  
+            <div class="title-underline"></div>  
+        </div>  
+          
+        <div class="portfolio-grid">  
+            <div class="portfolio-card reveal">  
+                <div class="project-visual">  
+                    <i class="fab fa-whatsapp project-main-icon"></i>  
+                </div>  
+                <div class="project-info">  
+                    <span class="project-category">بوت محادثة ذكي</span>  
+                    <h3>𝐄𝐋 𝐏𝐎𝐏 𝐁Ⓧ𝐓</h3>  
+                    <p>بوت متطور مخصص لمنصة واتساب لإدارة المهام والردود التفاعلية وتلبية احتياجات المستخدمين بسرعة فائقة.</p>  
+                    <div class="project-tags">  
+                        <span>JavaScript</span>  
+                        <span>Node.js</span>  
+                        <span>API</span>  
+                    </div>  
+                </div>  
+            </div>  
+              
+            <div class="portfolio-card reveal">  
+                <div class="project-visual">  
+                    <i class="fab fa-telegram project-main-icon"></i>  
+                </div>  
+                <div class="project-info">  
+                    <span class="project-category">تطوير بوتات</span>  
+                    <h3>بوت زراير تيليجرام</h3>  
+                    <p>بوت تيليجرام احترافي يعتمد على لوحات التحكم والزراير التفاعلية (Inline Buttons) لتجربة مستخدم مميزة وتصفح سهل.</p>  
+                    <div class="project-tags">  
+                        <span>Python</span>  
+                        <span>Telegram API</span>  
+                    </div>  
+                </div>  
+            </div>  
+              
+            <div class="portfolio-card reveal">  
+                <div class="project-visual">  
+                    <i class="fas fa-folder-open project-main-icon"></i>  
+                </div>  
+                <div class="project-info">  
+                    <span class="project-category">مستودع برمجيات</span>  
+                    <h3>ملفات بوتات مختلفة</h3>  
+                    <p>مجموعة من الملفات والسكريبتات البرمجية الجاهزة والمفتوحة المصدر المخصصة لبناء وتطوير البوتات المتنوعة بكفاءة عالية.</p>  
+                    <div class="project-tags">  
+                        <span>Python</span>  
+                        <span>JavaScript</span>  
+                        <span>JSON</span>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- قسم المهارات (Skills Section) -->  
+<section id="skills" class="skills-section section-padding">  
+    <div class="container">  
+        <div class="section-header reveal">  
+            <span class="header-tag">قدراتي البرمجية</span>  
+            <h2 class="section-title">المهارات التقنية</h2>  
+            <div class="title-underline"></div>  
+        </div>  
+          
+        <div class="skills-wrapper">  
+            <div class="skill-item reveal">  
+                <div class="skill-info">  
+                    <span class="skill-name"><i class="fab fa-js-square text-gold"></i> JavaScript</span>  
+                    <span class="skill-percentage" data-target="90">0%</span>  
+                </div>  
+                <div class="skill-bar-outer">  
+                    <div class="skill-bar-inner" data-width="90%"></div>  
+                </div>  
+            </div>  
+              
+            <div class="skill-item reveal">  
+                <div class="skill-info">  
+                    <span class="skill-name"><i class="fab fa-python text-gold"></i> Python</span>  
+                    <span class="skill-percentage" data-target="85">0%</span>  
+                </div>  
+                <div class="skill-bar-outer">  
+                    <div class="skill-bar-inner" data-width="85%"></div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- قسم التواصل (Contact Section) -->  
+<section id="contact" class="contact-section section-padding">  
+    <div class="container">  
+        <div class="section-header reveal">  
+            <span class="header-tag">تواصل معي</span>  
+            <h2 class="section-title">لنبدأ عملاً معاً</h2>  
+            <div class="title-underline"></div>  
+        </div>  
+          
+        <div class="contact-grid reveal">  
+            <div class="contact-card">  
+                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>  
+                <h3>رقم الواتساب المباشر</h3>  
+                <p class="contact-value" dir="ltr">01015115056</p>  
+                <a href="https://wa.me/201015115056" target="_blank" class="contact-action-btn ripple">راسلني مباشرة</a>  
+            </div>  
+              
+            <div class="contact-card">  
+                <div class="contact-icon"><i class="fas fa-bullhorn"></i></div>  
+                <h3>قناة واتساب الرسمية</h3>  
+                <p class="contact-value">تابع آخر أعمالي وأخباري</p>  
+                <a href="https://whatsapp.com/channel/0029Vb83VLS9mrGeH1iPbH30" target="_blank" class="contact-action-btn channel-btn ripple">انضم للقناة الآن</a>  
+            </div>  
+        </div>  
+    </div>  
+</section>  
+
+<!-- الفوتر (Footer) -->  
+<footer class="main-footer">  
+    <div class="container">  
+        <p>© 2026 EL POP | جميع الحقوق محفوظة</p>  
+        <p class="developer-tag">المطور: الـــبــــوب</p>  
+    </div>  
+</footer>  
+
+<!-- إعلان Popup المنبثق (عرض على كامل الشاشة) -->  
+<div id="ad-popup-overlay" class="ad-popup-overlay">  
+    <div class="ad-popup-container">  
+        <button id="ad-popup-close-btn" class="ad-popup-close-btn" aria-label="إغلاق الإعلان">&times;</button>  
+        <a href="https://chat.whatsapp.com/CqHY1zww72w4EzwOvvxUHn?s=cl&p=a&ilr=1&amv=1" target="_blank" class="ad-popup-image-wrapper">  
+            <img src="https://d.uguu.se/JsEcTyjw.jpg" alt="TON 618" class="ad-popup-image">  
+        </a>  
+    </div>  
+</div>  
+
+<!-- المنطق البرمجي التفاعلي (JavaScript) -->  
+<script>  
+    document.addEventListener("DOMContentLoaded", () => {  
+          
+        // 1. شاشة التحميل  
+        window.addEventListener("load", () => {  
+            const loader = document.getElementById("loader");  
+            loader.style.opacity = "0";  
+            setTimeout(() => {  
+                loader.style.visibility = "hidden";  
+            }, 500);  
+        });  
+
+        // 2. مؤشر الماوس المخصص  
+        const cursor = document.getElementById("custom-cursor");  
+        const cursorDot = document.getElementById("custom-cursor-dot");  
+
+        if (window.matchMedia("(pointer: fine)").matches) {  
+            cursor.style.display = "block";  
+            cursorDot.style.display = "block";  
+
+            document.addEventListener("mousemove", (e) => {  
+                cursor.style.left = e.clientX + "px";  
+                cursor.style.top = e.clientY + "px";  
+                cursorDot.style.left = e.clientX + "px";  
+                cursorDot.style.top = e.clientY + "px";  
+            });  
+
+            const interactiveElements = document.querySelectorAll("a, button, .service-card, .portfolio-card");  
+            interactiveElements.forEach((el) => {  
+                el.addEventListener("mouseenter", () => {  
+                    cursor.style.transform = "translate(-50%, -50%) scale(1.5)";  
+                    cursor.style.borderColor = "var(--text-primary)";  
+                });  
+                el.addEventListener("mouseleave", () => {  
+                    cursor.style.transform = "translate(-50%, -50%) scale(1)";  
+                    cursor.style.borderColor = "var(--accent-gold)";  
+                });  
+            });  
+        }  
+
+        // 3. قائمة الهواتف الذكية  
+        const hamburger = document.getElementById("hamburger");  
+        const navBar = document.getElementById("nav-bar");  
+        const navLinks = document.querySelectorAll(".nav-link");  
+
+        hamburger.addEventListener("click", () => {  
+            hamburger.classList.toggle("active");  
+            navBar.classList.toggle("active");  
+        });  
+
+        navLinks.forEach(link => {  
+            link.addEventListener("click", () => {  
+                hamburger.classList.remove("active");  
+                navBar.classList.remove("active");  
+            });  
+        });  
+
+        // 4. تبديل وضع الإضاءة  
+        const themeToggleBtn = document.getElementById("theme-toggle");  
+        const themeIcon = themeToggleBtn.querySelector("i");  
+        const currentTheme = localStorage.getItem("theme") || "dark";  
+
+        document.documentElement.setAttribute("data-theme", currentTheme);  
+        updateThemeIcon(currentTheme);  
+
+        themeToggleBtn.addEventListener("click", () => {  
+            let theme = document.documentElement.getAttribute("data-theme");  
+            let newTheme = theme === "dark" ? "light" : "dark";  
+              
+            document.documentElement.setAttribute("data-theme", newTheme);  
+            localStorage.setItem("theme", newTheme);  
+            updateThemeIcon(newTheme);  
+        });  
+
+        function updateThemeIcon(theme) {  
+            if (theme === "light") {  
+                themeIcon.className = "fas fa-sun";  
+            } else {  
+                themeIcon.className = "fas fa-moon";  
+            }  
+        }  
+
+        // 5. حركة الكتابة التلقائية  
+        const roles = [  
+            "Telegram Bot Developer",  
+            "Web Developer",  
+            "JavaScript Developer",  
+            "Python Developer"  
+        ];  
+        let roleIndex = 0;  
+        let charIndex = 0;  
+        let isDeleting = false;  
+        const typedTextEl = document.getElementById("typed-text");  
+
+        function typeEffect() {  
+            const currentRole = roles[roleIndex];  
+              
+            if (isDeleting) {  
+                charIndex--;  
+            } else {  
+                charIndex++;  
+            }  
+
+            typedTextEl.textContent = currentRole.substring(0, charIndex);  
+
+            let typeSpeed = isDeleting ? 40 : 80;  
+
+            if (!isDeleting && charIndex === currentRole.length) {  
+                typeSpeed = 1500;  
+                isDeleting = true;  
+            } else if (isDeleting && charIndex === 0) {  
+                isDeleting = false;  
+                roleIndex = (roleIndex + 1) % roles.length;  
+                typeSpeed = 400;  
+            }  
+
+            setTimeout(typeEffect, typeSpeed);  
+        }  
+          
+        setTimeout(typeEffect, 1000);  
+
+        // 6. شبكة الجسيمات التفاعلية  
+        const canvas = document.getElementById("particles-canvas");  
+        const ctx = canvas.getContext("2d");  
+
+        let particles = [];  
+        let numParticles = window.innerWidth < 768 ? 40 : 85;  
+
+        function resizeCanvas() {  
+            canvas.width = canvas.parentElement.offsetWidth;  
+            canvas.height = canvas.parentElement.offsetHeight;  
+        }  
+          
+        resizeCanvas();  
+        window.addEventListener("resize", () => {  
+            resizeCanvas();  
+        });  
+
+        class Particle {  
+            constructor() {  
+                this.x = Math.random() * canvas.width;  
+                this.y = Math.random() * canvas.height;  
+                this.size = Math.random() * 2 + 1;  
+                this.speedX = Math.random() * 0.4 - 0.2;  
+                this.speedY = Math.random() * 0.4 - 0.2;  
+                this.opacity = Math.random() * 0.5 + 0.1;  
+            }  
+
+            update() {  
+                this.x += this.speedX;  
+                this.y += this.speedY;  
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;  
+                if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;  
+            }  
+
+            draw() {  
+                const currentTheme = document.documentElement.getAttribute("data-theme");  
+                ctx.fillStyle = currentTheme === "light" ? `rgba(197, 160, 40, ${this.opacity})` : `rgba(212, 175, 55, ${this.opacity})`;  
+                ctx.beginPath();  
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);  
+                ctx.fill();  
+            }  
+        }  
+
+        function initParticles() {  
+            particles = [];  
+            for (let i = 0; i < numParticles; i++) {  
+                particles.push(new Particle());  
+            }  
+        }  
+
+        function animateParticles() {  
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  
+            particles.forEach(p => {  
+                p.update();  
+                p.draw();  
+            });  
+            requestAnimationFrame(animateParticles);  
+        }  
+
+        initParticles();  
+        animateParticles();  
+
+        // 7. Ripple Effect للأزرار  
+        const rippleButtons = document.querySelectorAll(".ripple");  
+
+        rippleButtons.forEach(btn => {  
+            btn.addEventListener("click", function(e) {  
+                const x = e.clientX - e.target.getBoundingClientRect().left;  
+                const y = e.clientY - e.target.getBoundingClientRect().top;  
+                  
+                const ripple = document.createElement("span");  
+                ripple.classList.add("ripple-span");  
+                ripple.style.left = `${x}px`;  
+                ripple.style.top = `${y}px`;  
+                  
+                this.appendChild(ripple);  
+                  
+                setTimeout(() => {  
+                    ripple.remove();  
+                }, 600);  
+            });  
+        });  
+
+        // 8. انيميشن التمرير  
+        const sections = document.querySelectorAll("section");  
+        const reveals = document.querySelectorAll(".reveal");  
+
+        function revealOnScroll() {  
+            const triggerBottom = window.innerHeight * 0.85;  
+
+            reveals.forEach(reveal => {  
+                const revealTop = reveal.getBoundingClientRect().top;  
+                if (revealTop < triggerBottom) {  
+                    reveal.classList.add("active");  
+                }  
+            });  
+
+            let scrollY = window.pageYOffset;  
+            sections.forEach(current => {  
+                const sectionHeight = current.offsetHeight;  
+                const sectionTop = current.offsetTop - 150;  
+                const sectionId = current.getAttribute("id");  
+
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {  
+                    document.querySelector(`.nav-menu a[href*=${sectionId}]`)?.classList.add("active");  
+                } else {  
+                    document.querySelector(`.nav-menu a[href*=${sectionId}]`)?.classList.remove("active");  
+                }  
+            });  
+
+            const header = document.querySelector(".main-header");  
+            const scrollTopBtn = document.getElementById("scroll-to-top");  
+
+            if (window.scrollY > 100) {  
+                header.classList.add("shrink");  
+            } else {  
+                header.classList.remove("shrink");  
+            }  
+
+            if (window.scrollY > 400) {  
+                scrollTopBtn.classList.add("show");  
+            } else {  
+                scrollTopBtn.classList.remove("show");  
+            }  
+        }  
+
+        window.addEventListener("scroll", revealOnScroll);  
+        revealOnScroll();  
+
+        document.getElementById("scroll-to-top").addEventListener("click", () => {  
+            window.scrollTo({  
+                top: 0,  
+                behavior: "smooth"  
+            });  
+        });  
+
+        // 9. حركة عداد المهارات  
+        const skillsSection = document.getElementById("skills");  
+        let skillsAnimated = false;  
+
+        function animateSkills() {  
+            const sectionTop = skillsSection.getBoundingClientRect().top;  
+            const triggerPoint = window.innerHeight * 0.9;  
+
+            if (sectionTop < triggerPoint && !skillsAnimated) {  
+                const skillBars = document.querySelectorAll(".skill-bar-inner");  
+                const skillPercentages = document.querySelectorAll(".skill-percentage");  
+
+                skillBars.forEach(bar => {  
+                    bar.style.width = bar.getAttribute("data-width");  
+                });  
+
+                skillPercentages.forEach(percentage => {  
+                    const targetValue = parseInt(percentage.getAttribute("data-target"));  
+                    let currentValue = 0;  
+                    const increment = targetValue / 100;  
+                    const interval = setInterval(() => {  
+                        currentValue += increment;  
+                        if (currentValue >= targetValue) {  
+                            percentage.textContent = targetValue + "%";  
+                            clearInterval(interval);  
+                        } else {  
+                            percentage.textContent = Math.ceil(currentValue) + "%";  
+                        }  
+                    }, 15);  
+                });  
+
+                skillsAnimated = true;  
+            }  
+        }  
+
+        window.addEventListener("scroll", animateSkills);  
+        animateSkills();  
+
+        // 10. إعلان Popup المنبثق  
+        const adOverlay = document.getElementById("ad-popup-overlay");  
+        const adCloseBtn = document.getElementById("ad-popup-close-btn");  
+        let adInterval = null;  
+
+        function showPopup() {  
+            if (!adOverlay) return;  
+            adOverlay.classList.add("show");  
+            document.body.style.overflow = "hidden";  
+        }  
+
+        function hidePopup() {  
+            if (!adOverlay) return;  
+            adOverlay.classList.remove("show");  
+            document.body.style.overflow = "auto";  
+        }  
+
+        setTimeout(() => {  
+            showPopup();  
+        }, 3000);  
+
+        if (adCloseBtn) {  
+            adCloseBtn.addEventListener("click", (e) => {  
+                e.stopPropagation();  
+                hidePopup();  
+                
+                if (!adInterval) {  
+                    adInterval = setInterval(showPopup, 180000);  
+                }  
+            });  
+        }  
+    });  
+</script>  
+
+</body>  
+</html>
